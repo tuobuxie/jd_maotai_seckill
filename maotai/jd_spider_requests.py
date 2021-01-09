@@ -113,7 +113,7 @@ class QrLogin:
             3、校验票据
         :param spider_session:
         """
-        self.qrcode_img_file = '../qr_code.png'
+        self.qrcode_img_file = './qr_code.png'
 
         self.spider_session = spider_session
         self.session = self.spider_session.get_session()
@@ -360,7 +360,9 @@ class JdSeckill(object):
                 self.request_seckill_url()
                 while True:
                     self.request_seckill_checkout_page()
-                    self.submit_seckill_order()
+                    if self.submit_seckill_order():
+                        logger.info('抢购成功，退出===================================')
+                        return
             except Exception as e:
                 logger.info('抢购发生异常，稍后继续执行！', e)
             wait_some_time()
@@ -381,7 +383,6 @@ class JdSeckill(object):
         resp = self.session.get(url=url, params=payload, headers=headers)
         resp_json = parse_json(resp.text)
         reserve_url = resp_json.get('url')
-        self.timers.start()
         while True:
             try:
                 self.session.get(url='https:' + reserve_url)
