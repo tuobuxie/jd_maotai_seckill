@@ -11,7 +11,7 @@ from lxml import etree
 from error.exception import SKException
 from maotai.jd_logger import logger
 from maotai.timer import Timer
-from maotai.config import global_config
+from maotai.config import (global_config,cookies_name)
 from concurrent.futures import ProcessPoolExecutor
 from helper.jd_helper import (
     parse_json,
@@ -76,7 +76,7 @@ class SpiderSession:
         if not os.path.exists(self.cookies_dir_path):
             return False
         for name in os.listdir(self.cookies_dir_path):
-            if name.endswith(".cookies"):
+            if name.endswith(cookies_name+".cookies"):
                 cookies_file = '{}{}'.format(self.cookies_dir_path, name)
                 break
         if cookies_file == '':
@@ -178,6 +178,8 @@ class QrLogin:
 
         save_image(resp, self.qrcode_img_file)
         logger.info('二维码获取成功，请打开京东APP扫描')
+        logger.info(resp.content)
+
         open_image(self.qrcode_img_file)
         return True
 
