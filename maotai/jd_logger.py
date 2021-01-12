@@ -1,10 +1,10 @@
 import logging
 import logging.handlers
-
+import maotai.config as config
 '''
 日志模块
 '''
-LOG_FILENAME = '../jd_seckill.log'
+LOG_FILENAME = './jd_seckill_'+config.cookies_name+'.log'
 logger = logging.getLogger()
 
 
